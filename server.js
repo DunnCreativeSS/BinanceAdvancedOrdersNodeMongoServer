@@ -3,6 +3,7 @@ var sleep = require('system-sleep');
 var key;
 var binance;
 var secret;
+var mongodbip = "mongodb://10.130.87.115:27017/clients"
 var MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const app = express();
@@ -30,7 +31,7 @@ app.post("/cancel", function(req, res) {
         APISECRET: secret,
         useServerTime: true
     });
-    MongoClient.connect("mongodb://172.30.160.104:27017/clients", function(err, db) {
+    MongoClient.connect(mongodbip, function(err, db) {
         var dbo = db.db('clients')
 
         console.log(key);
@@ -98,7 +99,7 @@ app.post("/order", function(req, res) {
                 useServerTime: true
             });
             pair = pair.replace('_', '');
-            MongoClient.connect("mongodb://172.30.160.104:27017/clients", function(err, db) {
+            MongoClient.connect(mongodbip, function(err, db) {
                     var dbo = db.db('clients')
                     console.log(key);
                     var collection = dbo.collection(key);
@@ -352,7 +353,7 @@ app.post("/order", function(req, res) {
                 }
             });
         }); app.post('/orders', function(req, res) {
-            MongoClient.connect("mongodb://172.30.160.104:27017/clients", function(err, db) {
+            MongoClient.connect(mongodbip, function(err, db) {
                 var dbo = db.db('clients')
                 var key = req.body.key;
                 var secret = req.body.secret;
@@ -396,7 +397,7 @@ app.post("/order", function(req, res) {
                     'result': 'error'
                 });
                 else {
-                    MongoClient.connect("mongodb://172.30.160.104:27017/clients", function(err, db) {
+                    MongoClient.connect(mongodbip, function(err, db) {
                         var dbo = db.db('clients')
                         console.log(key);
 
@@ -687,7 +688,7 @@ function doBinance(binance, i, doc, collection){
 									}
                                 });
 }
-MongoClient.connect("mongodb://172.30.160.104:27017/clients", function(err, db) {
+MongoClient.connect(mongodbip, function(err, db) {
     var dbo = db.db('clients')
     setInterval(function() {
         dbo.listCollections().toArray(function(err, collInfos) {
