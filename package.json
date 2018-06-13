@@ -1,0 +1,24 @@
+{
+  "author": {
+    "name": "Jarett Dunn",
+    "email": "jarettrsdunn@gmail.com"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "node-binance-api": "*",
+    "system-sleep": "*",
+    "mongodb": "*",
+    "express": "*",
+    "request": "*",
+    "body-parser": "*",
+    "ejs": "*",
+    "nonce": "*"
+  },
+  "deprecated": false,
+  "description": "Engine for running Binance Advanced Orders",
+  "engines": {
+    "node": ">=0.6"
+  },
+  "name": "BinanceAdvancedOrders",
+  "version": "1.0.4"
+}
