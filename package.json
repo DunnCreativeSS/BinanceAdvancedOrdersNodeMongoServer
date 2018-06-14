@@ -5,15 +5,16 @@
   },
   "bundleDependencies": false,
   "dependencies": {
-    "nconf": "*",
-    "node-binance-api": "*",
-    "system-sleep": "*",
-    "mongodb": "*",
-    "express": "*",
-    "request": "*",
+    "binance-api-node": "^0.8.0",
     "body-parser": "*",
     "ejs": "*",
-    "nonce": "*"
+    "express": "*",
+    "mongodb": "*",
+    "nconf": "*",
+    "node-binance-api": "*",
+    "nonce": "*",
+    "request": "*",
+    "system-sleep": "*"
   },
   "scripts": {
     "start": "node server.js"

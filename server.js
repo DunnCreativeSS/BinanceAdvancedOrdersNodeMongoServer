@@ -16,7 +16,6 @@ if (nconf.get('mongoDatabase')) {
   uri = `${uri}/${nconf.get('mongoDatabase')}`;
 
 }
-uri = "mongodb+srv://jare:w0rdp4ss@cluster0-lp0jg.mongodb.net/clients?retryWrites=true"
 console.log(uri);
 
 var mongodbip = uri;
@@ -388,7 +387,7 @@ app.post("/order", function(req, res) {
                                 arr[doc[d].orderId] = {
                                     tp: doc[d].tp,
                                     sl: doc[d].sl,
-
+									trailstop: doc[d].trailstop,
                                     type: doc[d].type,
                                     method: doc[d].method,
                                     direction: doc[d].direction,
@@ -457,7 +456,7 @@ function doBinance(binance, i, doc, collection){
                                                 // buy sltp
                                                 if (obj['highest']) {
                                                     if (obj['method'] == 'trailing') {
-                                                        if (ticker[obj['pair']] <= obj['highest'] / (1 + (obj['trail'] / 100))) {
+                                                        if (ticker[obj['pair']] >= obj['highest'] / (1 + (obj['trail'] / 100))) {
                                                             if (obj['type'] == "market") {
 
                                                                 binance.marketBuy(obj['pair'], obj['quantity']);
@@ -530,7 +529,8 @@ function doBinance(binance, i, doc, collection){
                                                             "orderId": parseFloat(orderId)
                                                         }, {
                                                             "$set": {
-                                                                "highest": ticker[obj['pair']]
+                                                                "highest": ticker[obj['pair']],
+																"trailstop": obj['highest'] / (1 + (obj['trail'] / 100))
                                                             }
                                                         }, {
                                                             
@@ -686,7 +686,8 @@ function doBinance(binance, i, doc, collection){
                                                                 "orderId": parseFloat(orderId)
                                                             }, {
                                                                 "$set": {
-                                                                    "highest": ticker[obj['pair']]
+                                                                    "highest": ticker[obj['pair']],
+																	"trailstop": obj['highest'] / (1 + (obj['trail'] / 100))
                                                                 }
                                                             }, {
                                                                 
