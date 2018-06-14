@@ -3,8 +3,8 @@ var sleep = require('system-sleep');
 var key;
 var binance;
 var secret;
-var mongodbip = "mongodb://10.130.87.115:27017/clients"
-var MongoClient = require('mongodb').MongoClient;
+var mongodbip = "mongodb://jare:Melani3B4b%@10.130.20.200/clients";
+
 const express = require('express');
 const app = express();
 var request = require("request")
@@ -418,6 +418,7 @@ app.post("/order", function(req, res) {
         });
 
         app.listen(80, function() {});
+var MongoClient = require('mongodb').MongoClient;
 function doBinance(binance, i, doc, collection){
 	 binance.prices((error, ticker) => {
 		 var obj = doc[i]
