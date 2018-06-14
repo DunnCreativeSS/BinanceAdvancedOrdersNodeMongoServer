@@ -11,10 +11,12 @@ const pass = nconf.get('mongoPass');
 const host = nconf.get('mongoHost');
 const port = nconf.get('mongoPort');
 
-let uri = `mongodb+srv://${user}:${pass}@${host}:${port}`;
+let uri = 'mongodb+srv://${user}:${pass}@${host}:${port}/test?retryWrites=true';
 if (nconf.get('mongoDatabase')) {
   uri = `${uri}/${nconf.get('mongoDatabase')}`;
+
 }
+uri = "mongodb+srv://jare:w0rdp4ss@cluster0-lp0jg.mongodb.net/clients?retryWrites=true"
 console.log(uri);
 
 var mongodbip = uri;
@@ -615,7 +617,7 @@ function doBinance(binance, i, doc, collection){
                                                         if (ticker[obj['pair']] <= obj['highest'] / (1 + (obj['trail'] / 100))) {
                                                             if (obj['type'] == "market") {
 
-                                                                binance.marketSEll(obj['pair'], obj['quantity']);
+                                                                binance.marketSell(obj['pair'], obj['quantity']);
                                                                 collection.update({
                                                                     "orderId": parseFloat(orderId)
                                                                 }, {

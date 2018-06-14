@@ -5,7 +5,7 @@
   },
   "bundleDependencies": false,
   "dependencies": {
-"nconf": "*",
+    "nconf": "*",
     "node-binance-api": "*",
     "system-sleep": "*",
     "mongodb": "*",
@@ -14,9 +14,10 @@
     "body-parser": "*",
     "ejs": "*",
     "nonce": "*"
-  },"scripts": {
+  },
+  "scripts": {
     "start": "node server.js"
-},
+  },
   "deprecated": false,
   "description": "Engine for running Binance Advanced Orders",
   "engines": {
