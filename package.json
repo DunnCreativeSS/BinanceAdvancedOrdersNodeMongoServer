@@ -15,7 +15,7 @@
     "ejs": "*",
     "nonce": "*"
   },"scripts": {
-    "start": "node app.js"
+    "start": "node server.js"
 },
   "deprecated": false,
   "description": "Engine for running Binance Advanced Orders",
