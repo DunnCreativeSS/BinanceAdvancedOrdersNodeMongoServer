@@ -13,7 +13,9 @@
     "body-parser": "*",
     "ejs": "*",
     "nonce": "*"
-  },
+  },"scripts": {
+    "start": "node app.js"
+}
   "deprecated": false,
   "description": "Engine for running Binance Advanced Orders",
   "engines": {
