@@ -3,7 +3,7 @@ var sleep = require('system-sleep');
 var key;
 var binance;
 var secret;
-var mongodbip = "mongodb://jare:Melani3B4b%@10.130.20.200/clients";
+var mongodbip = "mongodb://jare:Melani3B4b%@mongodb/clients";
 
 const express = require('express');
 const app = express();
