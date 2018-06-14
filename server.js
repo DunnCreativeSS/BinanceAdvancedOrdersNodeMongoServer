@@ -1,4 +1,4 @@
-const Binance = require('node-binance-api');
+
 var sleep = require('system-sleep');
 var key;
 var binance;
@@ -418,7 +418,7 @@ app.post("/order", function(req, res) {
         });
 
         app.listen(80, function() {});
-var MongoClient = require('mongodb').MongoClient;
+
 function doBinance(binance, i, doc, collection){
 	 binance.prices((error, ticker) => {
 		 var obj = doc[i]
