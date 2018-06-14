@@ -3,7 +3,7 @@ var sleep = require('system-sleep');
 var key;
 var binance;
 var secret;
-var mongodbip = "mongodb://jare:Melani3B4b%@mongodbroute-binanceadvancedordersmongo2.1d35.starter-us-east-1.openshiftapps.com/clients";
+var mongodbip = "mongodb://jare:Melani3B4b%@172.30.78.39:27017/clients";
 
 const express = require('express');
 const app = express();
