@@ -3,15 +3,21 @@ var sleep = require('system-sleep');
 var key;
 var binance;
 var secret;
-var url = '127.0.0.1:27017/' + process.env.OPENSHIFT_APP_NAME;
+const nconf = require('nconf');
+nconf.argv().env().file('keys.json');
 
-// if OPENSHIFT env variables are present, use the available connection info:
-if (process.env.OPENSHIFT_MONGODB_DB_URL) {
-    url = process.env.OPENSHIFT_MONGODB_DB_URL +
-    process.env.OPENSHIFT_APP_NAME;
+const user = nconf.get('mongoUser');
+const pass = nconf.get('mongoPass');
+const host = nconf.get('mongoHost');
+const port = nconf.get('mongoPort');
+
+let uri = `mongodb://${user}:${pass}@${host}:${port}`;
+if (nconf.get('mongoDatabase')) {
+  uri = `${uri}/${nconf.get('mongoDatabase')}`;
 }
+console.log(uri);
 
-var mongodbip = "mongodb://jare:w0rdp4ss@" + url;
+var mongodbip = uri;
 console.log(mongodbip);
 const express = require('express');
 const app = express();
