@@ -5,6 +5,7 @@
   },
   "bundleDependencies": false,
   "dependencies": {
+"nconf": "*",
     "node-binance-api": "*",
     "system-sleep": "*",
     "mongodb": "*",
