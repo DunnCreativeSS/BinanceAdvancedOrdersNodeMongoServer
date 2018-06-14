@@ -3,7 +3,15 @@ var sleep = require('system-sleep');
 var key;
 var binance;
 var secret;
-var mongodbip = "mongodb://jare:Melani3B4b%@172.30.78.39:27017/clients";
+var url = '127.0.0.1:27017/' + process.env.OPENSHIFT_APP_NAME;
+
+// if OPENSHIFT env variables are present, use the available connection info:
+if (process.env.OPENSHIFT_MONGODB_DB_URL) {
+    url = process.env.OPENSHIFT_MONGODB_DB_URL +
+    process.env.OPENSHIFT_APP_NAME;
+}
+
+var mongodbip = "mongodb://" + url;
 
 const express = require('express');
 const app = express();
