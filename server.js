@@ -11,8 +11,8 @@ if (process.env.OPENSHIFT_MONGODB_DB_URL) {
     process.env.OPENSHIFT_APP_NAME;
 }
 
-var mongodbip = "mongodb://" + url;
-
+var mongodbip = "mongodb://user425:vsP7WbS1aU3yGXsX@" + url;
+console.log(mongodbip);
 const express = require('express');
 const app = express();
 var request = require("request")
