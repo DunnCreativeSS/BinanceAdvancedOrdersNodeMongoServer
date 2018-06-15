@@ -529,12 +529,9 @@ var abc = -1;
 var docsitems = [];
 var wss;
 var opened = false;
-setInterval(function(){
-	if (opened){
-		opened = false;
-	wss.close();
-	}
-        MongoClient.connect(mongodbip, function(err, db) {
+function gogo(){
+	docsitems = [];
+	MongoClient.connect(mongodbip, function(err, db) {
             var dbo = db.db('clients2')
             dbo.listCollections().toArray(function(err, collInfos) {
                 // collInfos is an array of collection info objects that look like:
@@ -542,7 +539,7 @@ setInterval(function(){
                 collections = [];
                 for (col in collInfos) {
 
-                    ////////console.log(collInfos[col].name);
+                    //console.log(collInfos[col].name);
                     collections.push(dbo.collection(collInfos[col].name));
                 }
 				
@@ -555,7 +552,7 @@ for (var col in collections) {
                     var obj = doc[i];
 					for (var item in doc) {
                 var obj3 = doc[item];
-                ////console.log(obj);
+                //console.log(obj['pair']);
                 if (doc[item].pair) {
 					if (!docsitems.includes(doc[item].pair)){					console.log(doc[item].pair);
 
@@ -986,20 +983,13 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
 					}
                 })
             })
+}
+gogo();
+setInterval(function(){
+	if (opened){
+		opened = false;
+	wss.close();
+	}
+        gogo();
 			}, 60 * 5 * 1000);
 			
-        setInterval(function() {
-            MongoClient.connect(mongodbip, function(err, db) {
-                var dbo = db.db('clients2')
-                dbo.listCollections().toArray(function(err, collInfos) {
-                    // collInfos is an array of collection info objects that look like:
-                    // { name: 'test', options: {} }
-                    collections = [];
-                    for (col in collInfos) {
-
-                        ////////console.log(collInfos[col].name);
-                        collections.push(dbo.collection(collInfos[col].name));
-                    }
-                });
-            });
-        }, 60000);
