@@ -527,7 +527,13 @@ var ws = [];
 WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 var abc = -1;
 var docsitems = [];
-
+var wss;
+var opened = false;
+setInterval(function(){
+	if (opened){
+		opened = false;
+	wss.close();
+	}
         MongoClient.connect(mongodbip, function(err, db) {
             var dbo = db.db('clients2')
             dbo.listCollections().toArray(function(err, collInfos) {
@@ -560,10 +566,11 @@ for (var col in collections) {
 			 }
 			string = string.substring(0, string.length - 1);
 			console.log(string);
-                    var wss = (new WebSocket(string));
+                    wss = (new WebSocket(string));
 					
 wss.onopen = function() {
 console.log('open');
+opened = true;
 };
 var objcount = [];
 wss.onmessage = function(e) {
@@ -979,6 +986,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
 					}
                 })
             })
+			}, 60 * 5 * 1000);
 			
         setInterval(function() {
             MongoClient.connect(mongodbip, function(err, db) {
