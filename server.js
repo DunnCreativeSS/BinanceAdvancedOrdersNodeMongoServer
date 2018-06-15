@@ -23,7 +23,9 @@ if (nconf.get('mongoDatabase')) {
 
 }
 ////console.log(uri);
-uri = "mongodb://localhost/clients";
+uri = "mongodb://localhost/clients2";
+uri = "mongodb+srv://jare:w0rdp4ss@cluster0-lp0jg.mongodb.net/clients2?retryWrites=true"
+
 var mongodbip = uri;
 ////console.log(mongodbip);
 const express = require('express');
@@ -53,7 +55,7 @@ app.post("/cancel", function(req, res) {
         useServerTime: true
     });
     MongoClient.connect(mongodbip, function(err, db) {
-        var dbo = db.db('clients')
+        var dbo = db.db('clients2')
 
         ////console.log(key);
         var collection = dbo.collection(key);
@@ -129,7 +131,7 @@ app.post("/order", function(req, res) {
         var quantity = parseFloat(req.body.quantity);
         pair = pair.replace('_', '');
         MongoClient.connect(mongodbip, function(err, db) {
-            var dbo = db.db('clients')
+            var dbo = db.db('clients2')
             ////console.log(key);
             var collection = dbo.collection(key);
             ////console.log(direction);
@@ -450,7 +452,7 @@ app.post("/balances", function(req, res) {
 });
 app.post('/orders', function(req, res) {
     MongoClient.connect(mongodbip, function(err, db) {
-        var dbo = db.db('clients')
+        var dbo = db.db('clients2')
         var key = req.body.key;
         var secret = req.body.secret;
         ////console.log(key);
@@ -496,7 +498,7 @@ app.post('/', function(req, res) {
         });
         else {
             MongoClient.connect(mongodbip, function(err, db) {
-                var dbo = db.db('clients')
+                var dbo = db.db('clients2')
                 ////console.log(key);
 
                 dbo.collection(key).insert({
@@ -526,7 +528,7 @@ var abc = -1;
 var docsitems = [];
 
         MongoClient.connect(mongodbip, function(err, db) {
-            var dbo = db.db('clients')
+            var dbo = db.db('clients2')
             dbo.listCollections().toArray(function(err, collInfos) {
                 // collInfos is an array of collection info objects that look like:
                 // { name: 'test', options: {} }
@@ -979,7 +981,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
 			
         setInterval(function() {
             MongoClient.connect(mongodbip, function(err, db) {
-                var dbo = db.db('clients')
+                var dbo = db.db('clients2')
                 dbo.listCollections().toArray(function(err, collInfos) {
                     // collInfos is an array of collection info objects that look like:
                     // { name: 'test', options: {} }
