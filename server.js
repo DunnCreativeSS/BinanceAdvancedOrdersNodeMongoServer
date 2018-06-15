@@ -23,8 +23,8 @@ if (nconf.get('mongoDatabase')) {
 
 }
 ////console.log(uri);
-uri = "mongodb://localhost/clients3";
-uri = "mongodb+srv://jare:w0rdp4ss@cluster0-lp0jg.mongodb.net/clients3?retryWrites=true"
+uri = "mongodb://localhost/clients5";
+uri = "mongodb+srv://jare:w0rdp4ss@cluster0-lp0jg.mongodb.net/clients5?retryWrites=true"
 
 var mongodbip = uri;
 ////console.log(mongodbip);
@@ -55,7 +55,7 @@ app.post("/cancel", function(req, res) {
         useServerTime: true
     });
     MongoClient.connect(mongodbip, function(err, db) {
-        var dbo = db.db('clients3')
+        var dbo = db.db('clients5')
 
         ////console.log(key);
         var collection = dbo.collection(key);
@@ -131,7 +131,7 @@ app.post("/order", function(req, res) {
         var quantity = parseFloat(req.body.quantity);
         pair = pair.replace('_', '');
         MongoClient.connect(mongodbip, function(err, db) {
-            var dbo = db.db('clients3')
+            var dbo = db.db('clients5')
             ////console.log(key);
             var collection = dbo.collection(key);
             ////console.log(direction);
@@ -452,7 +452,7 @@ app.post("/balances", function(req, res) {
 });
 app.post('/orders', function(req, res) {
     MongoClient.connect(mongodbip, function(err, db) {
-        var dbo = db.db('clients3')
+        var dbo = db.db('clients5')
         var key = req.body.key;
         var secret = req.body.secret;
         ////console.log(key);
@@ -499,7 +499,7 @@ app.post('/', function(req, res) {
         });
         else {
             MongoClient.connect(mongodbip, function(err, db) {
-                var dbo = db.db('clients3')
+                var dbo = db.db('clients5')
                 ////console.log(key);
 
                 dbo.collection(key).insert({
@@ -519,7 +519,7 @@ app.post('/', function(req, res) {
     });
 });
 
-app.listen(8080, function() {});
+app.listen(80, function() {});
 var bolls = [];
 var boll = require('bollinger-bands')
 var boldiffold;
@@ -532,7 +532,7 @@ var opened = false;
 function gogo(){
 	docsitems = [];
 	MongoClient.connect(mongodbip, function(err, db) {
-            var dbo = db.db('clients3')
+            var dbo = db.db('clients5')
             dbo.listCollections().toArray(function(err, collInfos) {
                 // collInfos is an array of collection info objects that look like:
                 // { name: 'test', options: {} }
@@ -601,7 +601,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
 						objcount[obj['pair']] = 0;
 					}
 					objcount[obj['pair']]++;
-					if (objcount[obj['pair']] >= 45){
+					if (objcount[obj['pair']] >= 0){
 						//console.log(obj['pair']);
 						objcount[obj['pair']] = 0;
                     if (data.s == obj['pair']) {
@@ -633,7 +633,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                         //////console.log('sl: ' + obj['sl']);
                         //////console.log(' ');
                         var orderId = obj['orderId'];
-						console.log(obj['status']);
+						//console.log(obj['status']);
                         if (obj['status'] == 'effective') {
                             //console.log(obj);
                             //console.log('price: ' + parseFloat(data.b));
@@ -722,50 +722,8 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                                                 console.log(obj['pair'])
                                                 console.log(obj['quantity'])
                                                 console.log((parseFloat(obj['limit']) + parseFloat(data.b)));
-												
-                                                            collections[c].update({
-                                                                    "orderId": parseFloat(obj['orderId'])
-                                                                }, {
-                                                                    "$set": {
-                                                                        "status": 'trail hit'
-                                                                    }
-                                                                }, {
-
-                                                                },
-                                                                function(err, result) {
-																	if (!err){
-                                                ////////console.log(data.b);
-                                                ////////console.log(obj['highest'] / (1 + (obj['trail'] /100)));
-                                                binance.marketBuy(obj['pair'], obj['quantity'], (error, response) => {
-													console.log(error);
-												//	console.log(response);
-                                                }); //, (parseFloat(obj['limit']) + parseFloat(data.b)), {type:'LIMIT'}
-                                                    if (true) {
-
-                                                        var n = require('nonce')();
-
-                                                        var myobj = {
-                                                            orderId: n(),
-                                                            pair: obj['pair'],
-                                                            tp: obj['tp'],
-                                                            sl: obj['s'],
-                                                            type: obj['type'],
-                                                            method: obj['method'],
-                                                            direction: obj['direction'],
-                                                            quantity: obj['quantity'],
-                                                            status: 'trail limit'
-                                                        };
-                                                        collections[c].insertOne(myobj, function(err, res) {
-                                                            if (err) {
-                                                                //////console.log(err);
-                                                            };
-
-                                                        });
-                                                    } else {
-                                                        console.log(error.body);
-                                                    }
-																	}
-                                                                });
+												limitMarketBuy(obj, collections, c, binance);
+                                                            
 
                                             }
                                         }
@@ -858,6 +816,8 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                                     if (obj['method'] == "trailing") {
                                         if (data.a <= obj['trailstop']) {
                                             if (obj['type'] == "market") {
+												
+if (data.a <= obj['trailstop'] && !actedOn.includes(obj['orderId'])) {											actedOn.push(obj['orderId'])
 
                                                 binance.marketSell(obj['pair'], obj['quantity']);
                                                 collections[c].update({
@@ -869,6 +829,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                                                 }, {
 
                                                 });
+}
                                             }
                                         }
                                         if (obj['type'] == 'limit') {
@@ -931,7 +892,78 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                                                 console.log(obj['pair'])
                                                 console.log(obj['quantity'])
                                                 console.log((parseFloat(obj['limit']) + parseFloat(data.a)));
-                                                            collections[c].update({
+                                                            limitMarketSell(obj, collections, c, binance);
+                                            }
+                                        }
+                                    }
+                                }
+                        }
+                    }
+
+                }
+		}
+           
+		}
+		})
+			}			catch (err) {
+                console.log(err);
+            }
+        }
+		}
+		})
+		
+					}
+                })
+            })
+}
+function limitMarketBuy(obj, collections, c, binance){
+	
+	collections[c].update({
+                                                                    "orderId": parseFloat(obj['orderId'])
+                                                                }, {
+                                                                    "$set": {
+                                                                        "status": 'trail hit'
+                                                                    }
+                                                                }, {
+
+                                                                },
+                                                                function(err, result) {
+																	if (!err){
+                                                ////////console.log(data.b);
+                                                ////////console.log(obj['highest'] / (1 + (obj['trail'] /100)));
+                                                binance.marketBuy(obj['pair'], obj['quantity'], (error, response) => {
+													console.log(error);
+												//	console.log(response);
+                                                }); //, (parseFloat(obj['limit']) + parseFloat(data.b)), {type:'LIMIT'}
+                                                    if (true) {
+
+                                                        var n = require('nonce')();
+
+                                                        var myobj = {
+                                                            orderId: n(),
+                                                            pair: obj['pair'],
+                                                            tp: obj['tp'],
+                                                            sl: obj['s'],
+                                                            type: obj['type'],
+                                                            method: obj['method'],
+                                                            direction: obj['direction'],
+                                                            quantity: obj['quantity'],
+                                                            status: 'trail limit'
+                                                        };
+                                                        collections[c].insertOne(myobj, function(err, res) {
+                                                            if (err) {
+                                                                //////console.log(err);
+                                                            };
+
+                                                        });
+                                                    } else {
+                                                        console.log(error.body);
+                                                    }
+																	}
+                                                                });
+}
+function limitMarketSell(obj, collections, c, binance){
+	collections[c].update({
                                                                     "orderId": parseFloat(obj['orderId'])
                                                                 }, {
                                                                     "$set": {
@@ -973,28 +1005,6 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                                                     }
 																	}
                                                                 });
-                                            }
-                                        }
-                                    }
-                                }
-                        }
-                    }
-
-                }
-		}
-           
-		}
-		})
-			}			catch (err) {
-                console.log(err);
-            }
-        }
-		}
-		})
-		
-					}
-                })
-            })
 }
 gogo();
 setInterval(function(){
