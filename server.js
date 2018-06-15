@@ -518,7 +518,7 @@ app.post('/', function(req, res) {
     });
 });
 
-app.listen(80, function() {});
+app.listen(8080, function() {});
 var bolls = [];
 var boll = require('bollinger-bands')
 var boldiffold;
