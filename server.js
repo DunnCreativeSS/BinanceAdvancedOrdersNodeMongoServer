@@ -993,4 +993,4 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                     }
                 });
             });
-        }, 60 * 60000);
+        }, 60000);
