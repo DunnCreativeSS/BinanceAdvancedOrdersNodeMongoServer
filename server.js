@@ -492,7 +492,8 @@ app.post('/', function(req, res) {
         APISECRET: secret,
         useServerTime: true
     }); // If you want to use sandbox mode where orders are simulated
-    binance.balance((error, balances) => {
+    binance.prices((error, ticker) => {
+			console.log(error);
         if (error) res.json({
             'result': 'error'
         });
