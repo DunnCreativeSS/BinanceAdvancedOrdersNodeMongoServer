@@ -635,7 +635,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                         var orderId = obj['orderId'];
                         if (obj['status'] == 'effective') {
                             //console.log(obj);
-                            ////console.log('price: ' + parseFloat(data.b));
+                            //console.log('price: ' + parseFloat(data.b));
                             ////console.log('highest: ' + parseFloat(obj['highest']))
                             ////console.log('tp: ' + obj['tp']);
                             ////console.log('sl: ' + obj['sl']);
@@ -698,8 +698,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
 
                                         }
 										
-                                        if (data.b >= obj['trailstop'] && !actedOn.includes(obj['orderId'])) {
-											actedOn.push(obj['orderId'])
+                                        if (data.b >= obj['trailstop']) {
                                             if (obj['type'] == "market") {
 
                                                 binance.marketBuy(obj['pair'], obj['quantity']);
@@ -725,6 +724,8 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                                                 ////////console.log(data.b);
                                                 ////////console.log(obj['highest'] / (1 + (obj['trail'] /100)));
                                                 binance.marketBuy(obj['pair'], obj['quantity'], (error, response) => {
+													console.log(error);
+													console.log(response);
                                                 }); //, (parseFloat(obj['limit']) + parseFloat(data.b)), {type:'LIMIT'}
                                                     if (true) {
 
@@ -768,6 +769,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
 
                                 }
                                 if (parseFloat(data.b) >= obj['tp'] && obj['direction'] == 'buy' && !actedOn.includes(obj['orderId'])) {
+									console.log(1);
 											actedOn.push(obj['orderId'])
 
                                     ////////console.log(key);
@@ -786,6 +788,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                                 }
                                 // buy sltp
                                 if (parseFloat(data.b) <= obj['sl'] && obj['direction'] == 'buy' && !actedOn.includes(obj['orderId'])) {
+									console.log(2);
 											actedOn.push(obj['orderId'])
 
 
@@ -807,6 +810,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
 
                             if (parseFloat(data.a) <= obj['tp'] && obj['direction'] == 'sell' && !actedOn.includes(obj['orderId'])) {
 											actedOn.push(obj['orderId'])
+									console.log(3);
 
                                 //////console.log(obj);
                                 ////////console.log(key);
@@ -833,6 +837,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                             if (parseFloat(data.a) >= obj['sl'] && obj['direction'] == 'sell' && !actedOn.includes(obj['orderId'])) {
 											actedOn.push(obj['orderId'])
 
+									console.log(4);
 
                                 binance.marketSell(obj['pair'], obj['quantity']);
                                 collections[c].update({
@@ -847,8 +852,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                             } {
                                 if (obj['highest']) {
                                     if (obj['method'] == "trailing") {
-                                        if (data.a <= obj['trailstop'] && !actedOn.includes(obj['orderId'])) {
-											actedOn.push(obj['orderId'])
+                                        if (data.a <= obj['trailstop']) {
                                             if (obj['type'] == "market") {
 
                                                 binance.marketSell(obj['pair'], obj['quantity']);
@@ -865,7 +869,7 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
                                         }
                                         if (obj['type'] == 'limit') {
 
-                                            //	console.log("trailstop "+ obj['highest'] / (1 + (obj['trail'] / 100))); 
+                                            //console.log("trailstop "+ obj['highest'] / (1 + (obj['trail'] / 100))); 
                                             //console.log("highest " + data.a);
                                             var trailstop = obj['highest'] / (1 + (obj['trail'] / 100));
 
@@ -917,12 +921,15 @@ collections[c].find({}).toArray(function(err, doc) //find if a value exists
 
                                                     });
                                             }
+											console.log(actedOn);
                                             if (data.a <= obj['trailstop'] && !actedOn.includes(obj['orderId'])) {
 											actedOn.push(obj['orderId'])
                                                 console.log(obj['pair'])
                                                 console.log(obj['quantity'])
                                                 console.log((parseFloat(obj['limit']) + parseFloat(data.a)));
                                                 binance.marketSell(obj['pair'], obj['quantity'], (error, response) => {
+													console.log(error);
+													console.log(response);
                                                 }) //, (parseFloat(obj['limit']) + parseFloat(data.a)), {type:'LIMIT'}
                                                     ////////console.log("Limit Buy response", response.body);
                                                     ////////console.log("order id: " + response.orderId);
